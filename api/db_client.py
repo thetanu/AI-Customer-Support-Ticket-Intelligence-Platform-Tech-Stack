@@ -68,27 +68,27 @@ class DatabaseClient:
         # Create Tables (SQLite compatible versions)
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS Departments (
-            Department_ID INTEGER PRIMARY KEY AUTO_INCREMENT,
+            Department_ID INTEGER PRIMARY KEY AUTOINCREMENT,
             Department_Name TEXT UNIQUE
         );""")
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS Products (
-            Product_ID INTEGER PRIMARY KEY AUTO_INCREMENT,
+            Product_ID INTEGER PRIMARY KEY AUTOINCREMENT,
             Product_Name TEXT UNIQUE
         );""")
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS Categories (
-            Category_ID INTEGER PRIMARY KEY AUTO_INCREMENT,
+            Category_ID INTEGER PRIMARY KEY AUTOINCREMENT,
             Category_Name TEXT UNIQUE
         );""")
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS TicketStatus (
-            Status_ID INTEGER PRIMARY KEY AUTO_INCREMENT,
+            Status_ID INTEGER PRIMARY KEY AUTOINCREMENT,
             Status_Name TEXT UNIQUE
         );""")
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS Customers (
-            Customer_ID INTEGER PRIMARY KEY AUTO_INCREMENT,
+            Customer_ID INTEGER PRIMARY KEY AUTOINCREMENT,
             Customer_Name TEXT,
             Email TEXT UNIQUE,
             Age INTEGER,
@@ -96,7 +96,7 @@ class DatabaseClient:
         );""")
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS SupportAgents (
-            Agent_ID INTEGER PRIMARY KEY AUTO_INCREMENT,
+            Agent_ID INTEGER PRIMARY KEY AUTOINCREMENT,
             Agent_Name TEXT,
             Email TEXT UNIQUE,
             Department_ID INTEGER,
@@ -192,7 +192,7 @@ class DatabaseClient:
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
             """, (
                 int(row['Ticket_ID']), cust_id, prod_id, cat_id, status_id, agent_id,
-                row['Ticket_Subject'], row['Ticket_Description'], row['Priority'], row['Channel'],
+                row['Ticket_Subject'], row['Ticket_Description'], row['Priority'], row['Ticket_Channel'],
                 str(row['Created_Date']), str(row['Resolved_Date']), res_time, sat_rating, row['Resolution']
             ))
             
