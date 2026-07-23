@@ -99,13 +99,15 @@ def load_ml_models():
 models = load_ml_models()
 
 # Sidebar controls
-st.sidebar.image("https://img.icons8.com/clouds/200/artificial-intelligence.png", width=100)
+st.sidebar.markdown("<h1 style='text-align: center; margin-bottom: 0;'>🤖</h1>", unsafe_allow_html=True)
 st.sidebar.markdown("### 🤖 System Intelligence Controls")
 
 # API Configuration
+placeholder_text = "API Key Active (Loaded from Env)" if os.getenv("GEMINI_API_KEY") else "Enter your Gemini API Key..."
 api_key_input = st.sidebar.text_input("Gemini API Key", type="password", 
-                                     value=os.getenv("GEMINI_API_KEY", ""), 
-                                     help="Enter your Google Gemini API Key to enable AI summarization and support agent RAG features.")
+                                     value="", 
+                                     placeholder=placeholder_text,
+                                     help="Enter a Gemini API Key here to override the default key loaded from the .env file.")
 
 if api_key_input:
     os.environ["GEMINI_API_KEY"] = api_key_input
@@ -113,7 +115,7 @@ if api_key_input:
     ai_client.api_key_loaded = True
     import google.generativeai as genai
     genai.configure(api_key=api_key_input)
-    ai_client.model = genai.GenerativeModel('gemini-1.5-flash')
+    ai_client.model = genai.GenerativeModel('gemini-3.5-flash')
 
 # Model Loading Checklist
 st.sidebar.markdown("#### System Status Checklist")

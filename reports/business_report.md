@@ -65,3 +65,24 @@ Based on the findings, the following actions are recommended to optimize support
 1. **Vector Search Upgrade**: Replace the keyword overlap RAG system with a vector database (e.g., ChromaDB or pgvector) and sentence embeddings to retrieve more complex solutions.
 2. **Real-time Telephony Transcriptions**: Integrate speech-to-text models (Whisper API) to enable real-time summarization of support calls.
 3. **Live Ticketing Connector**: Connect the backend to live APIs (Zendesk, Salesforce Service Cloud, or Jira Service Desk) for automated ticket ingestion and synchronization.
+
+---
+
+## 6. Interactive Executive Dashboards
+
+To support operational management and executive decision-making, we designed two interactive dashboards in Excel and Power BI.
+
+### 6.1 Microsoft Excel Operational Dashboard
+The Excel workbook ([customer_support_tickets_analytics.xlsx](file:///c:/Users/ntanu/OneDrive/Desktop/AI-Customer-Support-Ticket-Intelligence-Platform/excel/customer_support_tickets_analytics.xlsx)) aggregates the cleaned dataset into key performance cards and dynamic pivot charts:
+*   **KPI Metrics**: Shows Total Tickets (8,469), Average Resolution Time (12.2 hours), High-Priority Tickets (2,812), Open Tickets (243), and Closed Tickets (5,630).
+*   **Visualizations**: Features category distribution column charts partitioned by ticket priority, and a monthly trend chart.
+
+![Excel Analytics Dashboard](../screenshots/excel_dashboard.png)
+
+### 6.2 Power BI Executive Analytics Portal
+The Power BI dashboard connects directly to the normalized data source to deliver interactive cross-filtering:
+*   **KPI Metrics**: Dynamic cards tracking real-time backlog status, ticket distribution, and satisfaction ratings.
+*   **Interactive Slicers**: Slicers for `Ticket Priority`, `Ticket Status`, and `Ticket Category` enable immediate detail-level filtering.
+
+![Power BI Executive Dashboard](../screenshots/powerbi_dashboard.png)
+

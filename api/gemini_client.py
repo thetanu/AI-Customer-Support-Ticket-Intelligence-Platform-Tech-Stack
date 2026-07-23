@@ -52,8 +52,8 @@ class GeminiClient:
     def __init__(self):
         self.api_key_loaded = HAS_GEMINI
         if self.api_key_loaded:
-            # We use gemini-1.5-flash as it is fast, cost-effective and highly capable
-            self.model = genai.GenerativeModel('gemini-1.5-flash')
+            # We use gemini-3.5-flash as it is fast, cost-effective and highly capable
+            self.model = genai.GenerativeModel('gemini-3.5-flash')
         else:
             self.model = None
 

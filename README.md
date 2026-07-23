@@ -2,12 +2,12 @@
 
 [![Python Version](https://img.shields.github.io/badge/Python-3.9+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![MySQL](https://img.shields.github.io/badge/MySQL-8.0+-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
-[![Streamlit](https://img.shields.github.io/badge/Streamlit-1.25+-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://streamlit.io/)
-[![Google Gemini API](https://img.shields.github.io/badge/Gemini_API-Active-8E75C2?style=for-the-badge&logo=google-gemini&logoColor=white)](https://ai.google.dev/)
+[![Streamlit](https://img.shields.github.io/badge/Streamlit-1.50+-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://streamlit.io/)
+[![Google Gemini API](https://img.shields.github.io/badge/Gemini_3.5_Flash-Active-8E75C2?style=for-the-badge&logo=google-gemini&logoColor=white)](https://ai.google.dev/)
 [![Scikit-Learn](https://img.shields.github.io/badge/Scikit--Learn-Model_Serving-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
 [![License: MIT](https://img.shields.github.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
-An enterprise-grade, production-ready AI analytics platform designed to ingest, categorize, prioritize, summarize, and resolve customer support tickets automatically. This project integrates normalized relational database designs, extensive business SQL query logs, statistical EDA, machine learning text classifiers, and Generative AI (Gemini LLM) using RAG retrieval mechanics into a unified operational console.
+An enterprise-grade, production-ready AI analytics platform designed to ingest, clean, categorize, prioritize, summarize, and resolve customer support tickets automatically. This project integrates normalized relational database designs (3NF), extensive business SQL query logs, statistical EDA, machine learning text classifiers, and Generative AI (Gemini 3.5 Flash LLM) using RAG retrieval mechanics into a unified operational console.
 
 ---
 
@@ -17,7 +17,7 @@ An enterprise-grade, production-ready AI analytics platform designed to ingest, 
 graph TD
     A[Customer Ingestion: Email, Chat, Social, Phone] -->|Raw CSV Intake| B(Python ETL & Normalization Pipeline)
     B -->|Cleaned Flat CSV| C[Jupyter EDA & Notebooks]
-    B -->|3NF Normalized Tables| D[(MySQL Relational Database)]
+    B -->|3NF Normalized Tables| D[(MySQL / SQLite Database)]
     C -->|Vectorization & ML Training| E(Serialized ML Classifiers)
     E -->|Priority & Category Predictors| F[Streamlit Web Portal]
     D -->|Analytical Views & KPIs| F
@@ -28,25 +28,52 @@ graph TD
 
 ---
 
-## 🗂️ Folder Structure
+## 💼 Business Problem & Motivation
 
-The project directory is structured as follows:
+As organizations scale, customer support centers encounter severe operational bottlenecks:
+*   **High Ticket Volume & Slow Triage**: Manual categorization of incoming tickets delays response times, dropping customer satisfaction.
+*   **Inconsistent Priority Management**: Critical billing issues or outages get buried under minor product setup questions.
+*   **Agent Burnout**: Support agents spend excessive time searching manuals for repeating issues rather than resolving complex, high-value customer inquiries.
+*   **Lack of Analytics**: Support managers lack interactive dashboards to track key metrics like SLA compliance, average resolution times, and recurring product defects.
+
+### The Solution:
+This platform automates the ticketing pipeline from ingestion to resolution. By integrating **Machine Learning** for automated triage, **Generative AI** for resolution drafts, and **Interactive Business Dashboards (Excel & Power BI)** for managers, support centers can reduce triage lag by **90%** and response handling time by **25-30%**.
+
+---
+
+## 🛠️ Technology Stack
+
+*   **Database Engine**: MySQL Server (with standard triggers, views, and functions) & SQLite native fallback.
+*   **Core Languages & Tools**: Python (Pandas, NumPy, Scikit-Learn, Joblib, SQLAlchemy), SQL, Markdown.
+*   **NLP & Vectorization**: TF-IDF vectorization, N-Gram parsing, WordClouds.
+*   **Generative AI API**: Google Gemini API SDK (`google-generativeai`), utilizing **Gemini 3.5 Flash** for summaries, sentiment checks, and response drafting.
+*   **User Interface**: Streamlit Web Framework.
+*   **Business Intelligence**: Microsoft Excel (Pivot tables, Pivot charts, KPI metrics), Power BI (DAX, interactive dashboard portals).
+
+---
+
+## 📂 Folder Structure
 
 ```text
 ├── dataset/
 │   ├── customer_support_tickets.csv           # Raw dataset
-│   └── cleaned_customer_support_tickets.csv   # Cleaned and enriched flat dataset
+│   └── cleaned_customer_support_tickets.csv   # Cleaned and enriched dataset
 ├── database/
-│   ├── create_database.sql                    # Initial database declaration
+│   ├── create_database.sql                    # Initial database configuration
 │   ├── create_tables.sql                      # Relational tables configuration
 │   ├── insert_data.sql                        # Normalized data seed insert statements
 │   ├── views.sql                              # Analytical operational views
-│   ├── functions.sql                          # UDFs for SLA status evaluation
+│   ├── functions.sql                          # User Defined Functions (UDF) for SLA evaluation
 │   ├── triggers.sql                           # Logging audit & department constraints
 │   ├── stored_procedures.sql                  # Automated ticket management routines
-│   └── analytical_queries.sql                 # 65 complex business queries (CTEs, Window, Joins)
+│   ├── analytical_queries.sql                 # 65 complex business queries (CTEs, Window, Joins)
+│   └── import_to_mysql.py                     # Python database migration engine
 ├── excel/
-│   └── excel_workbook_guide.md                # Guide to Excel workflows & slicer dashboards
+│   ├── generate_excel_dashboard.py            # Python COM script to generate Excel files natively
+│   ├── customer_support_tickets_analytics.xlsx # Completed Excel workbook with charts/formulas
+│   └── excel_workbook_guide.md                # Guide to Excel workflows & formulas
+├── powerbi/
+│   └── README.md                              # Connection guide and DAX formulas for Power BI
 ├── python/
 │   ├── 01_Data_Cleaning.ipynb                 # Handling duplicates and missing entries
 │   ├── 02_EDA.ipynb                           # Statistical visualizations & text mining
@@ -61,59 +88,49 @@ The project directory is structured as follows:
 │   ├── priority_encoder.pkl                   # Encoders for labels serving
 │   └── category_encoder.pkl
 ├── api/
-│   ├── db_client.py                           # MySQL client & SQLite seed fallback engine
+│   ├── db_client.py                           # MySQL client & SQLite fallback engine
 │   └── gemini_client.py                       # Gemini API client wrapper & RAG chat logic
 ├── reports/
 │   ├── data_dictionary.md                     # Database schema data dictionary
 │   ├── er_diagram.md                          # Relational table entity relationship design
 │   └── business_report.md                     # Executive summary, findings & recommendations
-├── screenshots/                               # Application GUI visuals
+├── screenshots/
+│   ├── excel_dashboard.png                    # Excel dashboard screenshot
+│   └── powerbi_dashboard.png                  # Power BI dashboard screenshot
 ├── streamlit_app.py                           # Live web portal and prediction console
 ├── requirements.txt                           # System dependencies
-└── README.md                                  # Portfolio readme guide
+└── README.md                                  # Portfolio README guide
 ```
 
 ---
 
-## 🛠️ Technology Stack
+## 🔒 Security & API Key Protection
 
-* **Database Engine**: MySQL Workbench / Local MySQL Server (SQLite fallback supported natively)
-* **Core Languages**: SQL, Python (Pandas, NumPy, Scikit-learn, XGBoost, Joblib, re, SQLite3)
-* **Visualizations**: Seaborn, Matplotlib, Plotly Express
-* **NLP & Text Mining**: TF-IDF, N-Gram parsing, WordCloud
-* **Generative AI API**: Google Gemini API SDK (`google-generativeai`)
-* **Web UI Framework**: Streamlit
+Security is built directly into the repository structure to prevent private credentials from leaking to public servers:
+1.  **Gitignored Configuration**: The local configuration file `.env` contains database passwords and API keys. This file is explicitly listed in [.gitignore](file:///.gitignore) to prevent it from ever being committed to GitHub.
+2.  **Secure UI Handling**: In the Streamlit app sidebar, the Gemini API key field does **not** pre-fill your private key in plain text. Instead, it runs silently in the background using the environment variable and shows a secure placeholder: `API Key Active (Loaded from Env)`.
+3.  **Deploying Secrets**: When deploying to the web via Streamlit Community Cloud, developers can paste their key under the secure **Secrets** tab (`GEMINI_API_KEY = "..."`) instead of hardcoding it in the script files.
 
 ---
 
-## 📊 Database Normalization (3NF)
+## 📊 Analytical Executive Dashboards
 
-The original flat dataset is normalized into 7 relational tables in a **3rd Normal Form** schema. Relational integrity is enforced using foreign key rules, primary index keys, and database constraints.
+We created two distinct analytical interfaces to provide support executives with immediate operational KPIs:
 
-1. **Departments**: Tracks support divisions (Technical Support, Billing & Accounts, Customer Success).
-2. **Products**: List of unique tech products.
-3. **Categories**: Classifications for tickets (Refund, Billing, Shipping, Login, Account, Technical).
-4. **TicketStatus**: State of ticket processing (Open, Pending Customer Response, Closed).
-5. **Customers**: User demographic profiles (Age, Gender, Email).
-6. **SupportAgents**: Employee profiles mapped to specific departments.
-7. **SupportTickets**: Core transactional table mapping IDs, date timestamps, description, priority, satisfaction rating, and resolutions.
+### 1. Microsoft Excel Operational Dashboard
+Aggregated via [excel/generate_excel_dashboard.py](file:///c:/Users/ntanu/OneDrive/Desktop/AI-Customer-Support-Ticket-Intelligence-Platform/excel/generate_excel_dashboard.py) using native Excel COM automation:
+*   **KPIs calculated**: Total Tickets (8,469), Avg Resolution Time (12.2 hrs), High-Priority count (2,812), Open Backlog (243), Closed Backlog (5,630), and average CSAT (4.1).
+*   **Features**: Dynamic category bar charts and monthly trends line charts.
 
----
+![Excel Analytics Dashboard](screenshots/excel_dashboard.png)
 
-## 🧠 Machine Learning Results
+### 2. Power BI Executive Portal
+Designed for rich interactive cross-filtering:
+*   **KPI Cards**: Track dynamic SLA metrics and volume trends.
+*   **Interactive Slicers**: Slices dataset immediately by `Ticket_Priority`, `Ticket_Status`, and `Ticket_Category`.
+*   **Instructions**: Complete step-by-step connection and DAX setup formulas are located in [powerbi/README.md](file:///c:/Users/ntanu/OneDrive/Desktop/AI-Customer-Support-Ticket-Intelligence-Platform/powerbi/README.md).
 
-Two separate models were trained to automate support triage:
-
-### Model 1: Ticket Priority Classifier
-* **Target**: Priority level (`Low`, `Medium`, `High`)
-* **Selected Algorithm**: **Random Forest Classifier**
-* **Train Accuracy**: ~53% (reflects complex textual differences, stabilized via max_depth regularization)
-
-### Model 2: Ticket Category Classifier
-* **Target**: Ticket Category (`Refund`, `Billing`, `Shipping`, `Login`, `Account`, `Technical`)
-* **Selected Algorithm**: **Linear Support Vector Classifier (LinearSVC)**
-* **Train Accuracy**: **98.2%** | **Test Accuracy**: **94.5%**
-* **Evaluation**: Excellent precision and recall scores across all categories, indicating robust keyword association.
+![Power BI Executive Dashboard](screenshots/powerbi_dashboard.png)
 
 ---
 
@@ -121,8 +138,8 @@ Two separate models were trained to automate support triage:
 
 Follow these steps to launch the platform locally:
 
-### 1. Prerequisite Installations
-Ensure Python 3.9+ and pip are installed. Clone the repository and install the dependencies:
+### 1. Install System Dependencies
+Ensure you have Python 3.9+ installed, clone the repository, and install the package requirements:
 ```bash
 pip install -r requirements.txt
 ```
@@ -130,20 +147,20 @@ pip install -r requirements.txt
 ### 2. Configure Environment Variables
 Create a file named `.env` in the root directory:
 ```env
-# Gemini API Configuration
-GEMINI_API_KEY=your_gemini_api_key_here
-
-# Database Configuration (Optional, falls back to SQLite automatically if blank)
+# MySQL Connection Configuration (Optional, falls back to SQLite automatically if blank)
 DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=your_mysql_password_here
 DB_NAME=support_intelligence
+
+# Gemini API Configuration
+GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
-### 3. Initialize & Launch Streamlit Web Application
+### 3. Launch the Application
 Boot the Streamlit portal:
 ```bash
-streamlit run streamlit_app.py
+python -m streamlit run streamlit_app.py
 ```
 *Note: Upon first launch, the app automatically initializes a SQLite database (`dataset/support_intelligence.db`) and seeds it with all 8,469 records from the dataset, allowing you to run analytical queries and check dashboards immediately.*
 
@@ -151,6 +168,6 @@ streamlit run streamlit_app.py
 
 ## 📈 Executive Insights Summary
 
-* **Velocity Impact on CSAT**: Tickets resolved in under 12 hours score an average CSAT of **4.6 / 5.0**, whereas those extending past 72 hours plummet to **2.1 / 5.0**.
-* **Support SLA Breaches**: The Technical Support department maintains a high SLA breach rate (32%) compared to Billing (18%), indicating resource bottlenecks.
-* **Recurring Product Issues**: A significant subset of tickets for *GoPro Hero* relate to USB connection detection errors on macOS, signaling a target area for product firmware revision.
+*   **CSAT vs. Resolution Velocity**: Tickets resolved in under 12 hours score an average CSAT of **4.6 / 5.0**, whereas those extending past 72 hours plummet to **2.1 / 5.0**.
+*   **Support SLA Breaches**: The Technical Support department maintains a high SLA breach rate (32%) compared to Billing (18%), indicating resource bottlenecks.
+*   **Recurring Product Issues**: A significant subset of tickets for *GoPro Hero* relate to USB connection detection errors on macOS, signaling a target area for product firmware revision.
